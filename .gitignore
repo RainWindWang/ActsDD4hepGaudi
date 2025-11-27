@@ -1,0 +1,19 @@
+# Build and install directories
+build/
+install/
+
+# CMake cache and generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+
+# Editor / OS noise
+*.swp
+*~
+.DS_Store
+
+# Logs, tmp
+*.log
+*.tmp
