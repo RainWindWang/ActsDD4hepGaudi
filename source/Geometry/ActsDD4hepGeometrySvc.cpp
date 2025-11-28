@@ -71,5 +71,5 @@ private:
   dd4hep::Detector* m_dd4hepDetector{nullptr};
 };
 
-/// declare Gaudi component
+// Declare as Gaudi component
 DECLARE_COMPONENT(ActsDD4hepGeometrySvc)

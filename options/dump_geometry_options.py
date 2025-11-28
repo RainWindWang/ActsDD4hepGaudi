@@ -1,6 +1,6 @@
 from Gaudi.Configuration import *
 from Configurables import ApplicationMgr
-from Configurables import ActsDD4hepGeometrySvc, DumpActsGeometryAlg
+from Configurables import ActsDD4hepGeometrySvc, DumpDD4hepGeometryAlg
 
 # ------------------------------------------------------------
 # Geometry service
@@ -12,7 +12,7 @@ geo_svc.DD4hepXMLFile = "/data/dust/user/wangyufe/luxegeo/compact/LUXETrackerAsE
 # ------------------------------------------------------------
 # Algorithm
 # ------------------------------------------------------------
-dump = DumpActsGeometryAlg("DumpActsGeometryAlg")
+dump = DumpDD4hepGeometryAlg("DumpDD4hepGeometryAlg")
 
 # ------------------------------------------------------------
 # Application manager

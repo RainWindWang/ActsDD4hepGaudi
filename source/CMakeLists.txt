@@ -1,4 +1,3 @@
-# ActsDD4hepGaudi/source/CMakeLists.txt
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -8,7 +7,11 @@ include_directories(
 
 set(sources
   Geometry/ActsDD4hepGeometrySvc.cpp
-  Algorithms/DumpActsGeometryAlg.cpp
+  Geometry/ActsPluginGeometrySvc.cpp
+  Geometry/ActsDD4hepCustomGeometrySvc.cpp
+
+  Algorithms/DumpDD4hepGeometryAlg.cpp
+  Algorithms/DumpActsTrackingGeometryAlg.cpp
 )
 
 gaudi_add_module(ActsDD4hepGeometry

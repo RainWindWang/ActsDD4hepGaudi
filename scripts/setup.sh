@@ -16,13 +16,13 @@ export LD_LIBRARY_PATH=/data/dust/user/wangyufe/ACTS_v44/install/lib64:$LD_LIBRA
 ###############################################
 # runtime: Gaudi Plugin & components
 ###############################################
-export LD_LIBRARY_PATH=/data/dust/user/wangyufe/ActsDD4hepGaudi/build/install/lib:$LD_LIBRARY_PATH
-export GAUDI_PLUGIN_PATH=/data/dust/user/wangyufe/ActsDD4hepGaudi/build/install/lib:$GAUDI_PLUGIN_PATH
+export LD_LIBRARY_PATH=/data/dust/user/wangyufe/ActsDD4hepGaudi/install/lib:$LD_LIBRARY_PATH
+export GAUDI_PLUGIN_PATH=/data/dust/user/wangyufe/ActsDD4hepGaudi/install/lib:$GAUDI_PLUGIN_PATH
 
 ###############################################
 # python: Gaudi auto-generated Conf modules
 ###############################################
-export PYTHONPATH=/data/dust/user/wangyufe/ActsDD4hepGaudi/build/install/python:$PYTHONPATH
+export PYTHONPATH=/data/dust/user/wangyufe/ActsDD4hepGaudi/install/python:$PYTHONPATH
 
 ###############################################
 # python option path
