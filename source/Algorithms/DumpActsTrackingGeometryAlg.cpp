@@ -1,13 +1,19 @@
 #include "DumpActsTrackingGeometryAlg.h"
 
+#include "Acts/Visualization/GeometryView3D.hpp"
+#include "Acts/Visualization/ObjVisualization3D.hpp"
+
+DECLARE_COMPONENT(DumpActsTrackingGeometryAlg)
+
 DumpActsTrackingGeometryAlg::DumpActsTrackingGeometryAlg(
     const std::string& name, ISvcLocator* svcLoc)
-    : Gaudi::Algorithm(name, svcLoc)
-{}
+    : Gaudi::Algorithm(name, svcLoc) {}
 
 StatusCode DumpActsTrackingGeometryAlg::initialize() {
   StatusCode sc = Gaudi::Algorithm::initialize();
-  if (!sc.isSuccess()) return sc;
+  if (!sc.isSuccess()) {
+    return sc;
+  }
 
   info() << "Initializing DumpActsTrackingGeometryAlg" << endmsg;
 
@@ -17,8 +23,11 @@ StatusCode DumpActsTrackingGeometryAlg::initialize() {
     return StatusCode::FAILURE;
   }
 
-  info() << "Retrieved tracking geometry service: "
-         << m_tgSvc.name() << endmsg;
+  info() << "Retrieved tracking geometry service: " << m_tgSvc.name()
+         << endmsg;
+
+  info() << "OBJ writing is " << (m_writeObj ? "ENABLED" : "DISABLED")
+         << ", file = '" << m_objFileName.value() << "'" << endmsg;
 
   return StatusCode::SUCCESS;
 }
@@ -37,9 +46,30 @@ StatusCode DumpActsTrackingGeometryAlg::execute(const EventContext&) const {
     return StatusCode::FAILURE;
   }
 
-  info() << "Dumping tracking geometry hierarchy..." << endmsg;
-
+  info() << "Dumping ACTS tracking geometry hierarchy..." << endmsg;
   dumpVolume(*world, "");
+
+  if (m_writeObj) {
+    info() << "Writing OBJ geometry file: '" << m_objFileName.value()
+           << "'" << endmsg;
+
+    Acts::ObjVisualization3D objWriter;
+
+    const Acts::GeometryContext& gctx = m_tgSvc->geoContext();
+
+    tgPtr->visitSurfaces(
+        [&](const Acts::Surface* surface) {
+          if (!surface) {
+            return;
+          }
+          Acts::GeometryView3D::drawSurface(objWriter, *surface, gctx);
+        });
+
+    objWriter.write(m_objFileName.value());
+
+    info() << "OBJ file written successfully: '" << m_objFileName.value()
+           << "'" << endmsg;
+  }
 
   return StatusCode::SUCCESS;
 }
@@ -49,29 +79,31 @@ StatusCode DumpActsTrackingGeometryAlg::finalize() {
   return Gaudi::Algorithm::finalize();
 }
 
-void DumpActsTrackingGeometryAlg::dumpVolume(
-    const Acts::TrackingVolume& v,
-    const std::string& indent) const
-{
+void DumpActsTrackingGeometryAlg::dumpVolume(const Acts::TrackingVolume& v,
+                                             const std::string& indent) const {
   info() << indent << "Volume: " << v.volumeName() << endmsg;
 
-  // Dump boundary surfaces
-  for (const auto& bs : v.boundarySurfaces()) {
-    info() << indent << "  BoundarySurface: "
-           << bs->surfaceRepresentation().name()
-           << " ID=" << bs->surfaceRepresentation().geometryId()
-           << endmsg;
+  // Boundary surfaces
+  const auto& bSurfaces = v.boundarySurfaces();
+  info() << indent << "  #BoundarySurfaces = " << bSurfaces.size() << endmsg;
+  for (const auto& bs : bSurfaces) {
+    const auto& sr = bs->surfaceRepresentation();
+    info() << indent << "    BoundarySurface: " << sr.name()
+           << "  GeoID=" << sr.geometryId() << endmsg;
   }
 
-  // Dump surfaces in the volume
-  for (const auto& srf : v.surfaces()) {
-    info() << indent << "  Surface: " << srf.name()
-           << " ID=" << srf.geometryId()
-           << endmsg;
+  // Surfaces inside this volume
+  const auto& surfaces = v.surfaces();
+  info() << indent << "  #Surfaces = " << surfaces.size() << endmsg;
+  for (const auto& srf : surfaces) {
+    info() << indent << "    Surface: " << srf.name()
+           << "  GeoID=" << srf.geometryId() << endmsg;
   }
 
-  // Dump contained volumes
-  for (const Acts::TrackingVolume& child : v.volumes()) {
+  // Child volumes
+  const auto& children = v.volumes();
+  info() << indent << "  #ChildVolumes = " << children.size() << endmsg;
+  for (const Acts::TrackingVolume& child : children) {
     dumpVolume(child, indent + "  ");
   }
 }
@@ -79,4 +111,3 @@ void DumpActsTrackingGeometryAlg::dumpVolume(
 
 // Declare as Gaudi component
 DECLARE_COMPONENT(DumpActsTrackingGeometryAlg)
-

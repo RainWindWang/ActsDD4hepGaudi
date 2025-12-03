@@ -6,7 +6,9 @@ from Configurables import ActsDD4hepGeometrySvc, DumpDD4hepGeometryAlg
 # Geometry service
 # ------------------------------------------------------------
 geo_svc = ActsDD4hepGeometrySvc("ActsDD4hepGeometrySvc")
-geo_svc.DD4hepXMLFile = "/data/dust/user/wangyufe/luxegeo/compact/LUXETrackerAsEndcap.xml"
+#geo_svc.DD4hepXMLFile = "/data/dust/user/wangyufe/luxegeo/compact/LUXETrackerAsEndcap.xml"
+#geo_svc.DD4hepXMLFile = "/data/dust/user/wangyufe/luxegeo/compact/LUXETracker.xml"
+geo_svc.DD4hepXMLFile = "/data/dust/user/wangyufe/luxegeo/compact/LUXETracker_BluePrint.xml"
 #geo_svc.BuildACTSGeometry = False
 
 # ------------------------------------------------------------

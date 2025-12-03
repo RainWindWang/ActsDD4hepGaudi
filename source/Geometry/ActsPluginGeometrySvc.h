@@ -1,17 +1,19 @@
-#pragma once
+#ifndef ACTSPLUGINGEOMETRYSVC_H
+#define ACTSPLUGINGEOMETRYSVC_H
+
+#include "Geometry/IActsTrackingGeometrySvc.h"
+#include "Geometry/IActsDD4hepGeometrySvc.h"
 
 #include "GaudiKernel/Service.h"
 #include <Gaudi/Property.h>
-#include "GaudiKernel/StatusCode.h"
 
 #include "Acts/Geometry/TrackingGeometry.hpp"
 #include "Acts/Geometry/GeometryContext.hpp"
 
-#include "Geometry/IActsDD4hepGeometrySvc.h"
+#include <memory>
 
-// builds Acts TrackingGeometry from existing DD4hep geometry
 class ActsPluginGeometrySvc
-  : public extends<Service, IInterface> {
+  : public extends<Service, IActsTrackingGeometrySvc> {
 
 public:
   using extends::extends;
@@ -19,32 +21,30 @@ public:
   StatusCode initialize() override;
   StatusCode finalize() override;
 
-  // Get Acts TrackingGeometry
-  const Acts::TrackingGeometry* trackingGeometry() const { return m_trackingGeo.get(); }
+  const Acts::TrackingGeometry*
+      trackingGeometry() const override;
 
-  // Access geometry context
-  const Acts::GeometryContext& geometryContext() const { return m_geoCtx; }
+  const Acts::GeometryContext&
+      geoContext() const override;
+  
+  std::string buildMode() const override;
 
 private:
-  // Name of existing ActsDD4hepGeometrySvc
   Gaudi::Property<std::string> m_dd4hepSvcName{
-      this, "DD4hepSvcName", "ActsDD4hepGeometrySvc",
-      "Name of the DD4hep geometry service providing dd4hep::Detector"};
+      this, "DD4hepSvc", "ActsDD4hepGeometrySvc",
+      "Name of DD4hep geometry service"};
 
-  // Optionally write OBJ geometry
-  Gaudi::Property<bool> m_writeObj{
-      this, "WriteObj", false, "Write OBJ geometry file"};
+  SmartIF<IActsDD4hepGeometrySvc> m_dd4hepSvc;
 
-  Gaudi::Property<std::string> m_objFileName{
-      this, "ObjFileName", "acts_geometry.obj",
-      "Path of the OBJ output file"};
+  std::shared_ptr<const Acts::TrackingGeometry> m_trackingGeometry;
 
-private:
-  IActsDD4hepGeometrySvc* m_dd4hepSvc = nullptr;
-
-  std::unique_ptr<const Acts::TrackingGeometry> m_trackingGeo;
   Acts::GeometryContext m_geoCtx;
 
-  StatusCode writeObjFile();
+  Gaudi::Property<bool> m_writeObj{
+      this, "WriteObj", false, "Write OBJ geometry"};
+
+  Gaudi::Property<std::string> m_objFileName{
+      this, "ObjFile", "actsGeometry.obj", "OBJ file name"};
 };
 
+#endif

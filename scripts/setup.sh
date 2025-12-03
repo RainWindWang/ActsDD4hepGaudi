@@ -33,3 +33,12 @@ export PYTHONPATH=/data/dust/user/wangyufe/ActsDD4hepGaudi/options:$PYTHONPATH
 # python import ACTS
 ###############################################
 export PYTHONPATH=/data/dust/user/wangyufe/ACTS_v44/install/python:$PYTHONPATH
+
+###############################################
+# LUXE constructor
+###############################################
+export LD_LIBRARY_PATH=/data/dust/user/wangyufe/luxegeo/install/lib:$LD_LIBRARY_PATH
+export DD4hep_LIBRARY_PATH=/data/dust/user/wangyufe/luxegeo/install/lib:$DD4hep_LIBRARY_PATH
+export LD_LIBRARY_PATH=/data/dust/user/wangyufe/luxegeo/install/lib64:$LD_LIBRARY_PATH
+export DD4hep_LIBRARY_PATH=/data/dust/user/wangyufe/luxegeo/install/lib64:$DD4hep_LIBRARY_PATH
+

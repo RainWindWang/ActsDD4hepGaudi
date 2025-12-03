@@ -2,12 +2,16 @@
 #define DUMPACTSTRACKINGGEOMETRYALG_H
 
 #include "GaudiKernel/Algorithm.h"
-#include "GaudiKernel/ServiceHandle.h"
 #include "GaudiKernel/EventContext.h"
+#include "GaudiKernel/ServiceHandle.h"
 #include "GaudiKernel/StatusCode.h"
 
+#include "GaudiKernel/ISvcLocator.h"
+#include <Gaudi/Property.h>
+
 #include "Acts/Geometry/TrackingGeometry.hpp"
-#include "Geometry/IActsTrackingGeometrySvc.h"   // <-- 你提供 tracking geometry 的接口
+#include "Acts/Geometry/TrackingVolume.hpp"
+#include "Geometry/IActsTrackingGeometrySvc.h"
 
 class DumpActsTrackingGeometryAlg : public Gaudi::Algorithm {
 public:
@@ -22,9 +26,17 @@ private:
                   const std::string& indent) const;
 
   ServiceHandle<IActsTrackingGeometrySvc> m_tgSvc{
-      this, "ActsTrackingGeometrySvc", "ActsTrackingGeometrySvc",
-      "Service providing Acts::TrackingGeometry" };
+      this, "ActsTrackingGeometrySvc", "ActsPluginGeometrySvc",
+      "Service providing Acts::TrackingGeometry"};
+
+  Gaudi::Property<bool> m_writeObj{
+      this, "WriteObj", true,
+      "If true, write a Wavefront OBJ file with all surfaces"};
+
+  /// OBJ
+  Gaudi::Property<std::string> m_objFileName{
+      this, "ObjFileName", "acts_dd4hep_geometry.obj",
+      "Output OBJ file name for geometry visualization"};
 };
 
 #endif
-

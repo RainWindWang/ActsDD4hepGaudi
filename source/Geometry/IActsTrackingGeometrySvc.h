@@ -15,14 +15,11 @@ public:
 
   virtual const Acts::TrackingGeometry* trackingGeometry() const = 0;
 
-  // ACTS GeometryContext
-  virtual Acts::GeometryContext geometryContext() const = 0;
+  virtual const Acts::GeometryContext& geoContext() const = 0;
 
-  // which geometry build method
   virtual std::string buildMode() const = 0;
 
   virtual ~IActsTrackingGeometrySvc() = default;
 };
 
 #endif
-
